@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juanma Rodriguez</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center; /* Center the columns horizontally */
+        }
+        .column {
+            flex: 1; /* Equal width columns */
+            margin: 0 10px; /* Add some spacing between columns */
+            max-height: 100vh; /* Limit the height of each column */
+            overflow-y: auto; /* Add vertical scroll if needed */
+        }
+        .card {
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex; /* Set cards to use flexbox */
+            align-items: center; /* Center contents vertically */
+        }
+        .card img {
+            width: 50px; /* Set width of the image */
+            margin-right: 10px; /* Add some spacing between image and text */
+        }
+        .card.finished {
+            background-color: #8BC34A; /* green */
+        }
+        .card.in-progress {
+            background-color: #FFEB3B; /* yellow */
+        }
+        .card.planned {
+            background-color: #FF5722; /* red */
+        }
+        .card:hover {
+            background-color: #e0e0e0;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .sortByLabel {
+            margin-right: 10px;
+        }
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .card-description {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juanma Rodriguez</h1>
+    <span class="sortByLabel">Ordenar por:</span>
+    <select id="sortSelect">
+        <option value="state" selected>Estado</option>
+        <option value="category">Categoria</option>
+    </select>
+    <div class="container" id="container">
+        <div class="column" id="finishedColumn">
+            <h2>Terminado</h2>
+            <div class="card finished" data-category="Hardware" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Hardware</div>
+                    <div class="card-description">Card 1: This is a description for hardware card</div>
+                </div>
+            </div>
+            <div class="card finished" data-category="Software" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Software</div>
+                    <div class="card-description">Card 5: This is a description for software card</div>
+                </div>
+            </div>
+            <div class="card finished" data-category="Miscelaneo" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Miscellaneous</div>
+                    <div class="card-description">Card 9: This is a description for miscellaneous card</div>
+                </div>
+            </div>
+        </div>
+        <div class="column" id="inProgressColumn">
+            <h2>Laburando</h2>
+            <div class="card in-progress" data-category="Fisica" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Physics</div>
+                    <div class="card-description">Card 2: This is a description for physics card</div>
+                </div>
+            </div>
+            <div class="card in-progress" data-category="Software" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Software</div>
+                    <div class="card-description">Card 4: This is a description for software card</div>
+                </div>
+            </div>
+        </div>
+        <div class="column" id="plannedColumn">
+            <h2>Planeado</h2>
+            <div class="card planned" data-category="Arte" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Art</div>
+                    <div class="card-description">Card 3: This is a description for art card</div>
+                </div>
+            </div>
+            <div class="card planned" data-category="Fisica" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Physics</div>
+                    <div class="card-description">Card 6: This is a description for physics card</div>
+                </div>
+            </div>
+            <div class="card planned" data-category="Arte" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Art</div>
+                    <div class="card-description">Card 7: This is a description for art card</div>
+                </div>
+            </div>
+            <div class="card planned" data-category="Miscelaneo" onclick="window.location.href='https://example.com'">
+                <div class="category-icon"></div>
+                <div>
+                    <div class="card-title">Miscellaneous</div>
+                    <div class="card-description">Card 8: This is a description for miscellaneous card</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var originalOrder = document.getElementById("container").innerHTML;
+		var numero = 0;
+		window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    console.log('This page was restored from the bfcache.');
+  } else {
+    console.log('This page was loaded normally.');
+  }
+});
+		
+		window.addEventListener('pageshow', () => {    
+								loadImages;
+								alert("page loaded");
+								});
+		
+        document.getElementById("sortSelect").addEventListener("change", sortCards);
+
+		function sortCards(){
+            var sortValue = this.value;
+            var container = document.getElementById("container");
+
+            if (sortValue === "state") {
+                container.innerHTML = originalOrder;
+            } else {
+                var categories = new Set();
+                var cards = document.querySelectorAll(".card");
+
+                cards.forEach(function(card) {
+                    categories.add(card.getAttribute("data-category"));
+                });
+
+                // Create new columns for each category
+                categories.forEach(function(category) {
+                    var newColumn = document.createElement("div");
+                    newColumn.classList.add("column");
+                    newColumn.innerHTML = "<h2>" + category + "</h2>";
+
+                    // Find the icon for the category
+                    var iconSrc = getIconSrc(category);
+                    var categoryIcon = document.createElement("img");
+                    categoryIcon.src = iconSrc;
+                    categoryIcon.alt = category + " Icon";
+                    categoryIcon.classList.add("category-icon");
+
+                    cards.forEach(function(card) {
+                        if (card.getAttribute("data-category") === category) {
+                            var cardClone = card.cloneNode(true);
+                            var cardIcon = cardClone.querySelector(".category-icon");
+                            if (cardIcon) {
+                                // Replace the category icon with the shared icon
+                                cardIcon.replaceWith(categoryIcon.cloneNode(true));
+                            }
+                            newColumn.appendChild(cardClone);
+                        }
+                    });
+
+                    container.appendChild(newColumn);
+                });
+
+                // Remove existing columns
+                container.querySelectorAll(".column").forEach(function(column) {
+                    if (!categories.has(column.firstElementChild.textContent)) {
+                        column.remove();
+                    }
+                });
+            }
+        }
+
+        // Function to get the icon src for a category
+        function getIconSrc(category) {
+            // Define your category-icon mapping here
+            var categoryIconMap = {
+                "Hardware": "https://via.placeholder.com/50",
+                "Software": "file:///D:/Desktop/pagina%20web/imagenes/logos/consola.webp",
+                "Miscelaneo": "https://via.placeholder.com/50",
+                "Fisica": "https://via.placeholder.com/50",
+                "Arte": "https://via.placeholder.com/50",
+                "Miscelaneo": "https://via.placeholder.com/50"
+            };
+            // Return the icon src based on category
+            return categoryIconMap[category];
+        }
+		
+		
+		
+		function loadImages() {
+			var cards = document.querySelectorAll('.card');
+			cards.forEach(function(card) {
+				var category = card.getAttribute('data-category');
+				var iconSrc = getIconSrc(category);
+				var categoryIcon = card.querySelector('.category-icon');
+				if (categoryIcon) {
+					categoryIcon.src = iconSrc;
+				}
+			});
+		}
+    </script>
+</body>
+</html>
